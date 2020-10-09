@@ -12,6 +12,7 @@ namespace LINQ_FUNDAMENTALS
     {
         static void Main(string[] args)
         {
+
             /*
              * // 1. Defino arreglo
             int[] arregloEnteros = { 1, 2, 5, 8, 55, 66, 99, 543, 2, 101, 010, 2, 66};
@@ -33,7 +34,7 @@ namespace LINQ_FUNDAMENTALS
             */
 
 
-
+            /*
             // Para mostrar datos de manera mas compleja
             // 1. Crear arreglo de clases de la clase Complejo
             // Complejo[] lst = { new Complejo(4, "Halo"), new Complejo(68, "AC"), new Complejo(87, "NFS"), new Complejo(1, "FIFA") };
@@ -56,7 +57,7 @@ namespace LINQ_FUNDAMENTALS
              * var oComplejo = (from d in lst
              *                 where d.Nombre == "NFS"
              *                 select d).FirstOrDefault();
-             * */
+             * 
 
             Console.WriteLine(oHalo.Imprime() + "\n");
 
@@ -71,6 +72,93 @@ namespace LINQ_FUNDAMENTALS
             }
 
             Console.ReadKey();
+            */
+
+            /*---------------------------------------------------------------------------------------
+             * */
+
+            // Linq fundamentals 2 ***********************
+            // 1. Se llena lista de elementos
+            List<Persona> lst = new List<Persona>() // Se inicializa lista
+            {
+                new Persona(){Edad = 25, Nombre="Jenny"},
+                new Persona(){Edad = 29, Nombre="Edward"},
+                new Persona(){Edad = 38, Nombre="Jhon"}
+            };
+
+            // 2 Con linq, se busca valor requerido
+            /* var edward = (from d in lst
+                           where d.Nombre == "Edward"
+                           select d).FirstOrDefault();
+
+             Console.WriteLine(edward.Nombre + " edad: " + edward.Edad);
+
+             Console.WriteLine("\n");
+            */
+
+            /*
+             * // Ordenado por nombre
+            var oPersona = from d in lst
+                           orderby d.Nombre
+                           select d;
+
+
+            foreach(var o in oPersona)
+            {
+                Console.WriteLine(o.Nombre + " edad: " + o.Edad);
+            }
+            */
+
+            /*
+            // Ordenado por nombre, segunda manera
+            List<string> oLst = (from d in lst
+                                 orderby d.Nombre
+                                 //select d.EdadYNombre()).ToList(); // Retorna todos los nombres y las edades
+                                 //select d.EdadYNombre()).Take(2).ToList();// Take(2) indica que va a tomar solo dos elementos, posterior a ordenarlos
+                                 select d.EdadYNombre()).Skip(1).Take(2).ToList();// Skip(2) indica que va a saltar los dos primeros, pero que tome los dos siguientes
+            */
+
+            // Para join de listas
+            // 1. Creo segunda lista
+            List<Persona> lst2 = new List<Persona>()
+            {
+                new Persona(){Edad = 51, Nombre = "Olga"},
+                new Persona(){Edad = 50, Nombre = "Fabio"}
+            };
+
+            /*List<string> oLst = (from d in lst
+                                 select d)
+                                 .Union(lst2)
+                                 .OrderBy(d => d.Nombre) // => expresion lambda en donde d es como parametro, y luego de => es el codigo dentro del metodo
+                                 .Select(d => d.EdadYNombre())
+                                 .ToList();
+            */
+
+            // Otra manera de obtener resultado en lista, con subconsultas
+            List<string> lstListasOrdenadas = (
+                                                from a in
+                                                    (from d in lst
+                                                     select d)
+                                                    .Union
+                                                    (from d in lst2
+                                                     select d)
+                                                orderby a.Nombre
+                                                select a.EdadYNombre()
+                                                )
+                                                .ToList();
+
+            foreach (var o in lstListasOrdenadas)
+            {
+                Console.WriteLine(o);
+            }
+
+            // Si quisiera contar numero de objetos en lista
+            int numeroObjetos = lstListasOrdenadas.Count;
+
+            Console.WriteLine("\nNúmero de objetos: " + numeroObjetos);
+
+            Console.ReadKey();
+            
         }
     }
 
