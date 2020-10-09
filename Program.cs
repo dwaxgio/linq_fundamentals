@@ -73,4 +73,5 @@ namespace LINQ_FUNDAMENTALS
             Console.ReadKey();
         }
     }
+
 }
